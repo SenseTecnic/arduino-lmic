@@ -60,6 +60,8 @@ At the very least, you should set the right type of transceiver (SX1272
 vs SX1276) in config.h, most other values should be fine at their
 defaults.
 
+* The default configuration is using the US915 frequency plan right now.
+
 Supported hardware
 ------------------
 This library is intended to be used with plain LoRa transceivers,
@@ -206,15 +208,6 @@ As described above, most connections can use arbitrary I/O pins on the
 Arduino side. To tell the LMIC library about these, a pin mapping struct
 is used in the sketch file.
 
-For example, this could look like this:
-
-	lmic_pinmap lmic_pins = {
-	    .nss = 6,
-	    .rxtx = LMIC_UNUSED_PIN,
-	    .rst = 5,
-	    .dio = {2, 3, 4},
-	};
-
 The names refer to the pins on the transceiver side, the numbers refer
 to the Arduino pin numbers (to use the analog pins, use constants like
 `A0`). For the DIO pins, the three numbers refer to DIO0, DIO1 and DIO2
@@ -226,24 +219,11 @@ see the notes above for when a pin can or cannot be left out).
 The name of this struct must always be `lmic_pins`, which is a special name
 recognized by the library.
 
-#### LoRa Nexus by Ideetron
-This board uses the following pin mapping:
-
-    const lmic_pinmap lmic_pins = {
-        .nss = 10,
-        .rxtx = LMIC_UNUSED_PIN,
-        .rst = LMIC_UNUSED_PIN, // hardwired to AtMega RESET
-        .dio = {4, 5, 7},
-    };
-
 Examples
 --------
 This library currently provides three examples:
 
- - `ttn-abp.ino` shows a basic transmission of a "Hello, world!" message
-   using the LoRaWAN protocol. It contains some frequency settings and
-   encryption keys intended for use with The Things Network, but these
-   also correspond to the default settings of most gateways, so it
+ - `ttn-abp-with-sensors.ino` shows a basic transmission of sensors data message     using the LoRaWAN protocol to the Things network backend. It contains some        frequency settings and encryption keys intended for use with The Things Network,  but these also correspond to the default settings of most gateways, so it
    should work with other networks and gateways as well. This example
    uses activation-by-personalization (ABP, preconfiguring a device
    address and encryption keys), and does not employ over-the-air
@@ -251,6 +231,10 @@ This library currently provides three examples:
 
    Reception of packets (in response to transmission, using the RX1 and
    RX2 receive windows is also supported).
+
+   The wire connection of this sample is as follows:
+
+   ![](wire_connection/feather_M0_with_sensors.png)
 
  - `ttn-otaa.ino` also sends a "Hello, world!" message, but uses over
    the air activation (OTAA) to first join a network to establish a
